@@ -9,8 +9,6 @@ export const ACH = [
   {id:'streak3',      icon:'🔥', name:'On Fire',          desc:'3-day habit streak'},
   {id:'streak7',      icon:'⚡', name:'Momentum',         desc:'7-day habit streak'},
   {id:'journal5',     icon:'📝', name:'Chronicler',       desc:'Write 5 journal entries'},
-  {id:'goal_add',     icon:'🎯', name:'Dream Big',        desc:'Add your first goal'},
-  {id:'goal_done',    icon:'🏆', name:'Goal Getter',      desc:'Complete a goal (100%)'},
   {id:'allrounder',   icon:'🌟', name:'All-Rounder',      desc:'Use all 4 core sections'},
 ];
 
@@ -50,10 +48,7 @@ export function checkAchievements(state) {
   
   if(Object.keys(state.journal).length >= 5) unlock('journal5');
   
-  if(state.goals.length >= 1) unlock('goal_add');
-  if(state.goals.some(g => g.current >= g.target && g.target > 0)) unlock('goal_done');
-  
-  const used = [state.todos.length, state.habits.length, state.goals.length, Object.keys(state.journal).length];
+  const used = [state.todos?.length || 0, state.habits?.length || 0, Object.keys(state.journal || {}).length];
   if(used.every(v => v > 0)) unlock('allrounder');
   
   return newAch;

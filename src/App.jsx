@@ -9,7 +9,8 @@ import Overview from './components/Overview'
 import Journal from './components/Journal'
 import Todos from './components/Todos'
 import Habits from './components/Habits'
-import Goals from './components/Goals'
+import Roadmap from './components/Roadmap'
+import Calendar from './components/Calendar'
 import Analytics from './components/Analytics'
 import WeeklyReview from './components/WeeklyReview'
 import AICoach from './components/AICoach'
@@ -117,7 +118,8 @@ function DashboardLayout() {
         {activeSection === 'journal' && <Journal />}
         {activeSection === 'todos' && <Todos />}
         {activeSection === 'habits' && <Habits />}
-        {activeSection === 'goals' && <Goals />}
+        {activeSection === 'roadmap' && <Roadmap />}
+        {activeSection === 'calendar' && <Calendar />}
         {activeSection === 'analytics' && <Analytics />}
         {activeSection === 'weekly' && <WeeklyReview />}
         {activeSection === 'ai' && <AICoach />}
@@ -145,10 +147,15 @@ function DashboardLayout() {
             <span className="bnav-icon">↻</span>
             <span className="bnav-label">Habits</span>
           </div>
-          <div className={`bnav-item ${activeSection === 'goals' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('goals')}>
-            <span className="bnav-icon">◎</span>
-            <span className="bnav-label">Goals</span>
+          <div className={`bnav-item ${activeSection === 'roadmap' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('roadmap')}>
+            <span className="bnav-icon">🗺️</span>
+            <span className="bnav-label">Roadmap</span>
+          </div>
+          <div className={`bnav-item ${activeSection === 'calendar' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('calendar')}>
+            <span className="bnav-icon">📅</span>
+            <span className="bnav-label">Calendar</span>
           </div>
           <div className={`bnav-item ${activeSection === 'analytics' ? 'active' : ''}`} 
             onClick={() => setActiveSection('analytics')}>

@@ -1,8 +1,32 @@
 import { useStore } from '../store'
 import { calcStreak, calcJournalStreak, todayKey, fmtDate, ACH } from '../utils'
+import { useState, useEffect } from 'react'
+import { getRoadmaps, getMilestonesByRoadmap } from '../db'
 
 export default function Overview() {
-  const { todos, habits, goals, journal, achievements, toggleTodo, toggleHabitDate } = useStore()
+  const { todos, habits, journal, achievements, toggleTodo, toggleHabitDate } = useStore()
+
+  const [roadmapProgress, setRoadmapProgress] = useState(0)
+
+  useEffect(() => {
+    async function loadProgress() {
+      try {
+        const r = await getRoadmaps()
+        let totalM = 0
+        let doneM = 0
+        for (const rm of r) {
+          const ms = await getMilestonesByRoadmap(rm.id)
+          totalM += ms.length
+          doneM += ms.filter(m => m.completed).length
+        }
+        if (totalM === 0) setRoadmapProgress(0)
+        else setRoadmapProgress(Math.round((doneM / totalM) * 100))
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    loadProgress()
+  }, [])
 
   const h = new Date().getHours()
   const greet = h < 12 ? 'Good Morning ☀️' : h < 17 ? 'Good Afternoon 🌤️' : 'Good Evening 🌙'
@@ -32,7 +56,7 @@ export default function Overview() {
       <div className="grid4" style={{ marginBottom: '1.25rem' }}>
         <div className="stat"><div className="stat-n" style={{ color: 'var(--ga)' }}>{todosDone}/{todosTotal}</div><div className="stat-l">Tasks Done Today</div></div>
         <div className="stat"><div className="stat-n" style={{ color: 'var(--gb)' }}>{habitsToday}/{habits.length}</div><div className="stat-l">Habits Checked</div></div>
-        <div className="stat"><div className="stat-n" style={{ color: 'var(--gc)' }}>{goals.length}</div><div className="stat-l">Active Goals</div></div>
+        <div className="stat"><div className="stat-n" style={{ color: 'var(--accent-purple)' }}>{roadmapProgress}%</div><div className="stat-l">ROADMAP PROGRESS</div></div>
         <div className="stat"><div className="stat-n" style={{ color: 'var(--gd)' }}>{jStreak} days</div><div className="stat-l">Journal Streak</div></div>
       </div>
 

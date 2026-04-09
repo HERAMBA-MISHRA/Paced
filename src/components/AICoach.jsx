@@ -3,7 +3,7 @@ import { useStore } from '../store'
 import { calcJournalStreak, calcStreak } from '../utils'
 
 export default function AICoach() {
-  const { todos, habits, goals, journal, chatHist, addChatMsg } = useStore()
+  const { todos, habits, journal, chatHist, addChatMsg } = useStore()
   
   const [chatIn, setChatIn] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,9 +20,8 @@ export default function AICoach() {
   const buildContext = () => {
     const todosDone = todos.filter(t => t.done).length
     const habitsData = habits.map(h => ({ name: h.name, streak: calcStreak(h) }))
-    const goalsData = goals.map(g => ({ title: g.title, pct: g.target > 0 ? Math.round((g.current / g.target) * 100) : 0 }))
     const jCount = Object.keys(journal).length
-    return `User's Paced data: ${todosDone}/${todos.length} todos completed. Habits: ${JSON.stringify(habitsData)}. Goals: ${JSON.stringify(goalsData)}. Journal entries: ${jCount}. Journal streak: ${calcJournalStreak(journal)} days.`
+    return `User's Paced data: ${todosDone}/${todos.length} todos completed. Habits: ${JSON.stringify(habitsData)}. Journal entries: ${jCount}. Journal streak: ${calcJournalStreak(journal)} days.`
   }
 
   const handleSend = async (textOverride) => {

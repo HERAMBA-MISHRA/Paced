@@ -16,7 +16,8 @@ export default function Sidebar({ activeSection, onNav }) {
     { id: 'journal', icon: '📔', label: 'Journal' },
     { id: 'todos', icon: '✅', label: 'To-Do List' },
     { id: 'habits', icon: '🔁', label: 'Habits' },
-    { id: 'goals', icon: '🎯', label: 'Goals' }
+    { id: 'roadmap', icon: '🗺️', label: 'Roadmap' },
+    { id: 'calendar', icon: '📅', label: 'Calendar' }
   ]
 
   const insightItems = [

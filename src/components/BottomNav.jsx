@@ -6,7 +6,7 @@ export default function BottomNav({ activeSection, onNav }) {
     { id: 'journal', icon: '📔', label: 'Journal' },
     { id: 'todos', icon: '✅', label: 'To-Do' },
     { id: 'habits', icon: '🔁', label: 'Habits' },
-    { id: 'goals', icon: '🎯', label: 'Goals' }
+    { id: 'roadmap', icon: '🗺️', label: 'Roadmap' }
   ];
 
   return (

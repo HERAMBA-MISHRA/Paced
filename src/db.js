@@ -4,6 +4,17 @@ export const db = new Dexie('PacedDB')
 db.version(1).stores({
   keyval: 'id, value'
 })
+db.version(2).stores({
+  keyval: 'id, value',
+  roadmaps: '++id, name, color, targetDate, createdAt',
+  milestones: '++id, roadmapId, title, description, startDate, endDate, completed, view, weeklyTasks'
+})
+db.version(3).stores({
+  keyval: 'id, value',
+  roadmaps: '++id, name, color, targetDate, createdAt',
+  milestones: '++id, roadmapId, title, description, startDate, endDate, completed, view, weeklyTasks',
+  events: '++id, title, date, startTime, endTime, type, notes, roadmapId, createdAt'
+})
 
 export const dexieStorage = {
   getItem: async (name) => {
@@ -50,4 +61,61 @@ export async function importDataFromFile(file) {
     reader.onerror = reject
     reader.readAsText(file)
   })
+}
+
+export async function createRoadmap(name, color, targetDate) {
+  return await db.roadmaps.add({ name, color, targetDate, createdAt: new Date().toISOString() })
+}
+
+export async function getRoadmaps() {
+  return await db.roadmaps.toArray()
+}
+
+export async function deleteRoadmap(id) {
+  await db.roadmaps.delete(id)
+  await db.milestones.where({ roadmapId: id }).delete()
+}
+
+export async function addMilestone(milestoneObj) {
+  return await db.milestones.add(milestoneObj)
+}
+
+export async function getMilestonesByRoadmap(roadmapId) {
+  return await db.milestones.where({ roadmapId }).toArray()
+}
+
+export async function toggleMilestone(id) {
+  const milestone = await db.milestones.get(id)
+  if (milestone) {
+    await db.milestones.update(id, { completed: !milestone.completed })
+  }
+}
+
+export async function updateMilestoneWeeklyTasks(id, tasks) {
+  await db.milestones.update(id, { weeklyTasks: tasks })
+}
+
+export async function deleteMilestone(id) {
+  await db.milestones.delete(id)
+}
+
+export async function addEvent(eventObj) {
+  return await db.events.add({ ...eventObj, createdAt: new Date().toISOString() })
+}
+
+export async function getEventsByDate(dateString) {
+  return await db.events.where({ date: dateString }).toArray()
+}
+
+export async function getEventsByMonth(year, month) {
+  const m = String(month).padStart(2, '0')
+  return await db.events.where('date').startsWith(`${year}-${m}`).toArray()
+}
+
+export async function deleteEvent(id) {
+  await db.events.delete(id)
+}
+
+export async function updateEvent(id, changes) {
+  await db.events.update(id, changes)
 }

@@ -44,8 +44,8 @@
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   --glass-shadow-hover: 0 16px 48px rgba(0,0,0,0.6);
   --text-primary: rgba(255,255,255,0.93);
-  --text-secondary: rgba(255,255,255,0.55);
-  --text-muted: rgba(255,255,255,0.25);
+  --text-secondary: rgba(255,255,255,0.6);
+  --text-muted: rgba(255,255,255,0.35);
   --sidebar-bg: rgba(255,255,255,0.03);
   --sidebar-icon: rgba(255,255,255,0.5);
   --sidebar-icon-active: rgba(255,255,255,0.95);
@@ -741,3 +741,38 @@ html {
 .main {
   scroll-behavior: smooth;
 }
+
+/* GLOBAL UI OVERRIDES */
+.btn { color: #ffffff !important; }
+.btn-ghost { color: var(--text-primary) !important; }
+
+.cal-nav-btn {
+  color: var(--text-primary);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  min-height: 38px;
+}
+
+.gi::placeholder { color: var(--text-muted) !important; opacity: 1; }
+.gi { color: var(--text-primary) !important; }
+
+input::placeholder { color: var(--text-muted) !important; opacity: 1; }
+input { color: var(--text-primary) !important; }
+
+.todo-txt { color: var(--text-primary) !important; font-size: 0.875rem; }
+.todo-item { color: var(--text-primary); }
+
+.sel { color: var(--text-primary) !important; background: var(--input-bg) !important; }
+.sel option { background: var(--bg-secondary); color: var(--text-primary); }
+
+.calendar-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56,189,248,0.3) transparent;
+}
+.calendar-container::-webkit-scrollbar { width: 4px; height: 4px; }
+.calendar-container::-webkit-scrollbar-thumb { background: rgba(56,189,248,0.3); border-radius: 4px; }
+.calendar-container::-webkit-scrollbar-track { background: transparent; }

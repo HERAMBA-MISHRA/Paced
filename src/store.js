@@ -8,7 +8,6 @@ export const useStore = create(
     (set, get) => ({
       todos: [],
       habits: [],
-      goals: [],
       journal: {},
       journalPin: null,
       weekRef: {},
@@ -64,20 +63,6 @@ export const useStore = create(
         return newState
       }),
       deleteHabit: (index) => set((s) => ({ habits: s.habits.filter((_, i) => i !== index) })),
-      
-      addGoal: (goal) => set((s) => {
-        const newState = { ...s, goals: [...s.goals, goal] }
-        newState.achievements = checkAchievements(newState)
-        return newState
-      }),
-      updateGoalProgress: (index, val) => set((s) => {
-        const goals = [...s.goals]
-        goals[index] = { ...goals[index], current: val }
-        const newState = { ...s, goals }
-        newState.achievements = checkAchievements(newState)
-        return newState
-      }),
-      deleteGoal: (index) => set((s) => ({ goals: s.goals.filter((_, i) => i !== index) })),
       
       saveJournal: (date, content) => set((s) => {
         const newState = { ...s, journal: { ...s.journal, [date]: content } }
