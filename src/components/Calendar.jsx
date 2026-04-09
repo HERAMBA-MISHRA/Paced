@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { addEvent, getEventsByMonth, deleteEvent, updateEvent } from '../db'
 import { todayKey } from '../utils'
+import { useStore } from '../store'
 
 const TYPE_COLORS = {
   meeting: { bg: 'rgba(56,189,248,0.2)', border: '#38BDF8', icon: '🔵' },
@@ -43,8 +44,9 @@ export default function Calendar() {
   
   const [winW, setWinW] = useState(window.innerWidth)
   const [mobileOffset, setMobileOffset] = useState(0)
+  const { showToast } = useStore()
 
-  const emptyForm = { id: null, title: '', date: todayKey(), startTime: '09:00', endTime: '10:00', type: 'meeting', notes: '' }
+  const emptyForm = { title: '', date: todayKey(), startTime: '09:00', endTime: '10:00', type: 'meeting', notes: '' }
   const [evForm, setEvForm] = useState(emptyForm)
 
   useEffect(() => {
@@ -104,28 +106,50 @@ export default function Calendar() {
   }
 
   const handleSaveEvent = async () => {
-    if(!evForm.title || !evForm.date) return
-    if(evForm.id) {
-      await updateEvent(evForm.id, evForm)
-    } else {
-      await addEvent(evForm)
+    if(!evForm.title || !evForm.date) {
+      showToast("Please provide a title and date")
+      return
     }
-    setIsEventPanelOpen(false)
-    loadEvents()
+    try {
+      if(evForm.id) {
+        await updateEvent(evForm.id, evForm)
+        showToast("Event updated")
+      } else {
+        const { id, ...data } = evForm
+        await addEvent(data)
+        showToast("Event added")
+      }
+      setIsEventPanelOpen(false)
+      await loadEvents()
+    } catch (err) {
+      console.error("Save Event Error:", err)
+      showToast("Failed to save event")
+    }
   }
 
   const handleDeleteEvent = async (id = evForm.id) => {
     if(!id) return
-    await deleteEvent(id)
-    setIsEventPanelOpen(false)
-    loadEvents()
+    try {
+      await deleteEvent(id)
+      setIsEventPanelOpen(false)
+      await loadEvents()
+      showToast("Event deleted")
+    } catch (err) {
+      showToast("Failed to delete event")
+    }
   }
 
-  const openForm = (evObj = null, dateKey = null) => {
+  const openForm = (evObj = null, dateKey = null, startTime = null) => {
     if(evObj) {
       setEvForm(evObj)
     } else {
-      setEvForm({ ...emptyForm, date: dateKey || todayKey() })
+      let st = startTime || '09:00'
+      let et = '10:00'
+      if (startTime) {
+        let h = parseInt(startTime.split(':')[0])
+        et = `${String(Math.min(h+1, 23)).padStart(2, '0')}:00`
+      }
+      setEvForm({ ...emptyForm, date: dateKey || todayKey(), startTime: st, endTime: et })
     }
     setIsEventPanelOpen(true)
   }
@@ -198,7 +222,7 @@ export default function Calendar() {
               
               return (
                 <div key={dKey} className="cal-day-col">
-                  {hours.map(h => <div key={h} className="cal-grid-cell"></div>)}
+                  {hours.map(h => <div key={h} className="cal-grid-cell" style={{ cursor: 'pointer' }} onClick={() => openForm(null, dKey, h)}></div>)}
                   {dayEvents.map(e => {
                      const topPx = getTopOffset(e.startTime)
                      const heightPx = getHeight(e.startTime, e.endTime)
@@ -255,9 +279,37 @@ export default function Calendar() {
   }
 
   const renderDay = () => {
+    const dKey = parseDateKey(baseDate)
+    const dayEvents = events.filter(e => e.date === dKey).sort((a,b) => parseTime(a.startTime) - parseTime(b.startTime))
+    
     return (
-      <div className="cal-week-container cal-day-container">
-        {renderTimeColumnContent([baseDate])}
+      <div style={{ display: 'flex', gap: '1.5rem', flexDirection: isMobile ? 'column' : 'row' }}>
+        <div style={{ flex: 1 }}>
+          <div className="cal-week-container cal-day-container">
+            {renderTimeColumnContent([baseDate])}
+          </div>
+        </div>
+        <div style={{ width: isMobile ? '100%' : '320px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="card" style={{ padding: '1.25rem' }}>
+            <h3 style={{ marginTop: 0, marginBottom: '1rem', color: 'var(--text-primary)' }}>Daily Agenda</h3>
+            {dayEvents.length === 0 ? (
+              <div className="empty" style={{ margin: '1rem 0' }}>No events today.</div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {dayEvents.map(e => (
+                  <div key={e.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px', background: 'var(--glass-bg)', borderRadius: '10px', borderLeft: `3px solid ${TYPE_COLORS[e.type]?.border || '#fff'}`, cursor: 'pointer' }} onClick={() => openForm(e)}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{e.startTime} - {e.endTime}</div>
+                    </div>
+                    <button style={{ background: 'transparent', border: 'none', color: 'var(--accent-red, #ef4444)', cursor: 'pointer', fontSize: '1.2rem' }} onClick={(ev) => { ev.stopPropagation(); handleDeleteEvent(e.id) }}>×</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <button className="btn" style={{ width: '100%', marginTop: '1rem' }} onClick={() => openForm(null, dKey)}>+ Add Event</button>
+          </div>
+        </div>
       </div>
     )
   }

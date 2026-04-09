@@ -161,7 +161,11 @@ export default function Roadmap() {
   const msDone = milestones.filter(m => m.completed).length
   const progressPct = msTotal === 0 ? 0 : Math.round((msDone / msTotal) * 100)
 
-  const handlePushTodo = (ms) => {
+  const handlePushTodo = async (ms) => {
+    if (!ms.endDate) {
+      showToast("Milestone has no end date set")
+      return
+    }
     let tasks = parseTasks(ms.weeklyTasks)
     let added = 0
     const today = todayKey()
@@ -178,7 +182,7 @@ export default function Roadmap() {
       }
     })
     
-    addEvent({
+    await addEvent({
       title: `[${activeRoadmap.name}] - ${ms.title}`,
       date: ms.endDate,
       startTime: "09:00",
