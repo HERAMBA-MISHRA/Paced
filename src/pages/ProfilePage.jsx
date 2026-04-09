@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useUser, SignOutButton } from '@clerk/clerk-react'
 import { useNavigate } from 'react-router-dom'
+import { useRef } from 'react'
 import { useStore } from '../store'
 import { hashPin } from '../utils'
+import { exportDataToFile, importDataFromFile } from '../db'
 
 export default function ProfilePage() {
   const { user } = useUser()
@@ -13,6 +15,23 @@ export default function ProfilePage() {
   const [currentPin, setCurrentPin] = useState('')
   const [newPin, setNewPin] = useState('')
   const [error, setError] = useState('')
+
+  const fileInputRef = useRef(null)
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    try {
+      await importDataFromFile(file)
+      window.location.reload()
+    } catch (err) {
+      alert('Failed to import data: Invalid file format.')
+    }
+  }
 
   if (!user) return null
 
@@ -59,6 +78,15 @@ export default function ProfilePage() {
               Sign Out
             </button>
           </SignOutButton>
+        </div>
+      </div>
+
+      <div className="card" style={{ width: '100%', maxWidth: '400px', marginBottom: '1rem' }}>
+        <div className="ct">Data Management</div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button className="btn-ghost" style={{ flex: 1 }} onClick={exportDataToFile}>Export Data</button>
+          <button className="btn-ghost" style={{ flex: 1 }} onClick={handleImportClick}>Import Data</button>
+          <input type="file" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} accept=".json" />
         </div>
       </div>
 
