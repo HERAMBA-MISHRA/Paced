@@ -76,6 +76,10 @@ export async function deleteRoadmap(id) {
   await db.milestones.where({ roadmapId: id }).delete()
 }
 
+export async function updateRoadmap(id, changes) {
+  await db.roadmaps.update(id, changes)
+}
+
 export async function addMilestone(milestoneObj) {
   return await db.milestones.add(milestoneObj)
 }
@@ -97,6 +101,10 @@ export async function updateMilestoneWeeklyTasks(id, tasks) {
 
 export async function deleteMilestone(id) {
   await db.milestones.delete(id)
+}
+
+export async function updateMilestone(id, changes) {
+  await db.milestones.update(id, changes)
 }
 
 export async function addEvent(eventObj) {
