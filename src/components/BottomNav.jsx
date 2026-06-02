@@ -1,12 +1,15 @@
 import React from 'react';
+import {
+  LayoutDashboard, BookOpen, CheckSquare, Repeat, Map
+} from 'lucide-react'
 
 export default function BottomNav({ activeSection, onNav }) {
   const navItems = [
-    { id: 'overview', icon: '🏠', label: 'Overview' },
-    { id: 'journal', icon: '📔', label: 'Journal' },
-    { id: 'todos', icon: '✅', label: 'To-Do' },
-    { id: 'habits', icon: '🔁', label: 'Habits' },
-    { id: 'roadmap', icon: '🗺️', label: 'Roadmap' }
+    { id: 'overview', icon: LayoutDashboard, label: 'Overview' },
+    { id: 'journal', icon: BookOpen, label: 'Journal' },
+    { id: 'todos', icon: CheckSquare, label: 'To-Do' },
+    { id: 'habits', icon: Repeat, label: 'Habits' },
+    { id: 'roadmap', icon: Map, label: 'Roadmap' }
   ];
 
   return (
@@ -19,7 +22,7 @@ export default function BottomNav({ activeSection, onNav }) {
             onClick={() => onNav(item.id)}
             title={item.label}
           >
-            {item.icon}
+            <item.icon size={18} strokeWidth={1.8} />
           </div>
         ))}
       </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useStore } from '../store'
 import { dateKey, fmtDate, hashPin } from '../utils'
+import { BookOpen, Lock, Sparkles } from 'lucide-react'
 
 const PROMPTS = [
   "What made you smile today, even for just a moment?",
@@ -41,7 +42,7 @@ export default function Journal() {
       return
     }
     saveJournal(key, content.trim())
-    showToast('Entry saved ✓')
+    showToast('Entry saved')
   }
 
   const handleAiPrompt = async () => {
@@ -55,9 +56,9 @@ export default function Journal() {
       })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
-      setAiPrompt('✨ ' + data.text)
+      setAiPrompt(data.text)
     } catch (e) {
-      setAiPrompt('✨ ' + PROMPTS[Math.floor(Math.random() * PROMPTS.length)])
+      setAiPrompt(PROMPTS[Math.floor(Math.random() * PROMPTS.length)])
     } finally {
       setLoadingPrompt(false)
     }
@@ -85,7 +86,9 @@ export default function Journal() {
     return (
       <div className="section active" id="sec-journal" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div className="card" style={{ width: '100%', maxWidth: '360px', textAlign: 'center' }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔒</div>
+          <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center' }}>
+            <Lock size={40} strokeWidth={1.5} style={{ color: 'var(--accent-purple)' }} />
+          </div>
           <h2 style={{ fontFamily: "'Syne', sans-serif", marginBottom: '1rem' }}>Journal Locked</h2>
           <p style={{ color: 'var(--md)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Enter your PIN to access your private entries.</p>
           <input 
@@ -110,12 +113,14 @@ export default function Journal() {
     <div className="section active" id="sec-journal">
       <div className="ph" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <h1>📔 Journal</h1>
+          <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <BookOpen size={28} strokeWidth={2} /> Journal
+          </h1>
           <p>Capture your thoughts, feelings and reflections</p>
         </div>
         {journalPin && (
-          <button className="btn-ghost" onClick={() => setIsUnlocked(false)} style={{ margin: 0, padding: '6px 14px', fontSize: '0.85rem' }}>
-            🔒 Lock
+          <button className="btn-ghost" onClick={() => setIsUnlocked(false)} style={{ margin: 0, padding: '6px 14px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Lock size={14} strokeWidth={2} /> Lock
           </button>
         )}
       </div>
@@ -133,13 +138,15 @@ export default function Journal() {
             className="gt"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="What's on your mind today?&#10;&#10;Write freely — this is your private space."
+            placeholder={"What's on your mind today?\n\nWrite freely — this is your private space."}
             style={{ minHeight: '220px' }}
           />
           <div className="wc">{w} word{w !== 1 ? 's' : ''}</div>
           <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
             <button className="btn btn-wide" onClick={handleSave} style={{ margin: '0', flex: 1 }}>Save Entry</button>
-            <button className="btn-ghost" onClick={handleAiPrompt} disabled={loadingPrompt} style={{ padding: '9px 14px', borderRadius: 'var(--rs)', flexShrink: 0 }}>✨ Prompt me</button>
+            <button className="btn-ghost" onClick={handleAiPrompt} disabled={loadingPrompt} style={{ padding: '9px 14px', borderRadius: 'var(--rs)', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Sparkles size={14} strokeWidth={2} /> Prompt me
+            </button>
           </div>
           {aiPrompt && (
             <div style={{ marginTop: '.75rem', padding: '10px 14px', background: 'rgba(110,231,183,.08)', border: '1px solid rgba(110,231,183,.2)', borderRadius: 'var(--rs)', fontSize: '.82rem', color: 'var(--gb)', lineHeight: '1.6' }}>

@@ -2,6 +2,7 @@ import { useStore } from '../store'
 import { calcStreak, calcJournalStreak, todayKey, fmtDate, ACH } from '../utils'
 import { useState, useEffect } from 'react'
 import { getRoadmaps, getMilestonesByRoadmap } from '../db'
+import { Trophy, Flame } from 'lucide-react'
 
 export default function Overview() {
   const { todos, habits, journal, achievements, toggleTodo, toggleHabitDate } = useStore()
@@ -29,7 +30,7 @@ export default function Overview() {
   }, [])
 
   const h = new Date().getHours()
-  const greet = h < 12 ? 'Good Morning ☀️' : h < 17 ? 'Good Afternoon 🌤️' : 'Good Evening 🌙'
+  const greet = h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening'
   const today = todayKey()
 
   const todosTotal = todos.length
@@ -44,11 +45,11 @@ export default function Overview() {
       <div className="ph">
         <div className="ph-row">
           <div>
-            <h1>{greet} ✨</h1>
+            <h1>{greet}</h1>
             <p>{fmtDate(today)}</p>
           </div>
-          <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '.9rem', color: 'var(--md)' }}>
-            🏆 {achievements.length}/{ACH.length} achievements
+          <div style={{ fontFamily: "'Syne',sans-serif", fontSize: '.9rem', color: 'var(--md)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Trophy size={16} strokeWidth={1.8} /> {achievements.length}/{ACH.length} achievements
           </div>
         </div>
       </div>
@@ -72,7 +73,7 @@ export default function Overview() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '.88rem' }}>{h.name}</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ fontSize: '.75rem', color: 'var(--md)' }}>🔥{streak}</span>
+                      <span style={{ fontSize: '.75rem', color: 'var(--md)', display: 'flex', alignItems: 'center', gap: '3px' }}><Flame size={12} strokeWidth={2} />{streak}</span>
                       <div className={`chk ${done ? 'done' : ''}`} onClick={() => toggleHabitDate(i, today)}></div>
                     </div>
                   </div>
@@ -93,7 +94,7 @@ export default function Overview() {
                 <span className={`priority-badge p-${t.priority}`}>{t.priority}</span>
               </li>
             )) : (
-              <li className="empty">All caught up! 🎉</li>
+              <li className="empty">All caught up!</li>
             )}
           </ul>
         </div>

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useStore } from '../store'
 import { calcJournalStreak, calcStreak } from '../utils'
+import { Bot, TrendingUp, Target, Zap, ListTree, Send } from 'lucide-react'
 
 export default function AICoach() {
   const { todos, habits, journal, chatHist, addChatMsg } = useStore()
@@ -68,22 +69,32 @@ export default function AICoach() {
   return (
     <div className="section active" id="sec-ai">
       <div className="ph">
-        <h1>🤖 AI Life Coach</h1>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Bot size={28} strokeWidth={2} /> AI Life Coach
+        </h1>
         <p>Your personal coach — ask anything about goals, habits, or mindset</p>
       </div>
 
       <div className="card">
         <div className="ct">Quick Prompts</div>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '1rem' }}>
-          <button className="btn-ghost" onClick={() => quickPrompt('How am I doing overall with my goals and habits?')}>📈 Progress check</button>
-          <button className="btn-ghost" onClick={() => quickPrompt('What should I focus on this week?')}>🎯 Weekly focus</button>
-          <button className="btn-ghost" onClick={() => quickPrompt('Give me a motivational message for today.')}>💪 Motivate me</button>
-          <button className="btn-ghost" onClick={() => quickPrompt('Help me break down my biggest goal into steps.')}>🪜 Break down a goal</button>
+          <button className="btn-ghost" onClick={() => quickPrompt('How am I doing overall with my goals and habits?')} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <TrendingUp size={14} strokeWidth={2} /> Progress check
+          </button>
+          <button className="btn-ghost" onClick={() => quickPrompt('What should I focus on this week?')} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Target size={14} strokeWidth={2} /> Weekly focus
+          </button>
+          <button className="btn-ghost" onClick={() => quickPrompt('Give me a motivational message for today.')} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Zap size={14} strokeWidth={2} /> Motivate me
+          </button>
+          <button className="btn-ghost" onClick={() => quickPrompt('Help me break down my biggest goal into steps.')} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <ListTree size={14} strokeWidth={2} /> Break down a goal
+          </button>
         </div>
 
         <div className="chat-window">
           <div className="msg ai">
-            Hey! I'm your Paced AI Coach 🌟 I can see your goals, habits and journal — tell me what's on your mind, or pick a quick prompt above.
+            Hey! I'm your Paced AI Coach. I can see your goals, habits and journal — tell me what's on your mind, or pick a quick prompt above.
           </div>
           
           {chatHist.map((msg, i) => (
@@ -106,7 +117,9 @@ export default function AICoach() {
             placeholder="Ask your AI coach anything…"
             onKeyDown={(e) => { if (e.key === 'Enter') handleSend() }}
           />
-          <button className="btn" onClick={() => handleSend()}>Send →</button>
+          <button className="btn" onClick={() => handleSend()} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Send size={14} strokeWidth={2} /> Send
+          </button>
         </div>
       </div>
     </div>

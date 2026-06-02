@@ -19,6 +19,12 @@ import SignInPage from './pages/SignInPage'
 import SignUpPage from './pages/SignUpPage'
 import ProfilePage from './pages/ProfilePage'
 
+import {
+  LayoutDashboard, BookOpen, CheckSquare, Repeat,
+  Map, CalendarDays, BarChart3, CalendarRange, Bot,
+  Sun, Moon, Home
+} from 'lucide-react'
+
 function ProtectedRoute({ children }) {
   const { isSignedIn, isLoaded } = useAuth()
   if (!isLoaded) return <div className="section active">Loading auth...</div>
@@ -47,6 +53,18 @@ function DashboardLayout() {
   const toggleTheme = () => {
     setTheme(t => t === 'dark' ? 'light' : 'dark')
   }
+
+  const bottomNavItems = [
+    { id: 'overview', icon: Home, label: 'Overview' },
+    { id: 'journal', icon: BookOpen, label: 'Journal' },
+    { id: 'todos', icon: CheckSquare, label: 'Tasks' },
+    { id: 'habits', icon: Repeat, label: 'Habits' },
+    { id: 'roadmap', icon: Map, label: 'Roadmap' },
+    { id: 'calendar', icon: CalendarDays, label: 'Calendar' },
+    { id: 'analytics', icon: BarChart3, label: 'Analytics' },
+    { id: 'weekly', icon: CalendarRange, label: 'Weekly' },
+    { id: 'ai', icon: Bot, label: 'AI Coach' }
+  ]
 
   return (
     <>
@@ -104,9 +122,9 @@ function DashboardLayout() {
               className="theme-toggle"
               onClick={toggleTheme}
               title="Toggle theme"
-              style={{ width: '38px', height: '38px', borderRadius: '50%', fontSize: '16px' }}
+              style={{ width: '38px', height: '38px', borderRadius: '50%' }}
             >
-              {theme === 'dark' ? '☀️' : '🌙'}
+              {theme === 'dark' ? <Sun size={16} strokeWidth={2} /> : <Moon size={16} strokeWidth={2} />}
             </button>
             <div className="avatar" id="av">
               {userName?.slice(0, 2).toUpperCase() || 'U'}
@@ -127,51 +145,16 @@ function DashboardLayout() {
 
       <nav className="bottom-nav">
         <div className="bottom-nav-inner">
-          <div className={`bnav-item ${activeSection === 'overview' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('overview')}>
-            <span className="bnav-icon">⌂</span>
-            <span className="bnav-label">Overview</span>
-          </div>
-          <div className={`bnav-item ${activeSection === 'journal' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('journal')}>
-            <span className="bnav-icon">✎</span>
-            <span className="bnav-label">Journal</span>
-          </div>
-          <div className={`bnav-item ${activeSection === 'todos' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('todos')}>
-            <span className="bnav-icon">✓</span>
-            <span className="bnav-label">Tasks</span>
-          </div>
-          <div className={`bnav-item ${activeSection === 'habits' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('habits')}>
-            <span className="bnav-icon">↻</span>
-            <span className="bnav-label">Habits</span>
-          </div>
-          <div className={`bnav-item ${activeSection === 'roadmap' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('roadmap')}>
-            <span className="bnav-icon">🗺️</span>
-            <span className="bnav-label">Roadmap</span>
-          </div>
-          <div className={`bnav-item ${activeSection === 'calendar' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('calendar')}>
-            <span className="bnav-icon">📅</span>
-            <span className="bnav-label">Calendar</span>
-          </div>
-          <div className={`bnav-item ${activeSection === 'analytics' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('analytics')}>
-            <span className="bnav-icon">📊</span>
-            <span className="bnav-label">Analytics</span>
-          </div>
-          <div className={`bnav-item ${activeSection === 'weekly' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('weekly')}>
-            <span className="bnav-icon">🗓️</span>
-            <span className="bnav-label">Weekly</span>
-          </div>
-          <div className={`bnav-item ${activeSection === 'ai' ? 'active' : ''}`} 
-            onClick={() => setActiveSection('ai')}>
-            <span className="bnav-icon">🤖</span>
-            <span className="bnav-label">AI Coach</span>
-          </div>
+          {bottomNavItems.map(item => (
+            <div
+              key={item.id}
+              className={`bnav-item ${activeSection === item.id ? 'active' : ''}`}
+              onClick={() => setActiveSection(item.id)}
+            >
+              <span className="bnav-icon"><item.icon size={18} strokeWidth={1.8} /></span>
+              <span className="bnav-label">{item.label}</span>
+            </div>
+          ))}
         </div>
       </nav>
 
@@ -205,4 +188,3 @@ export default function App() {
     </>
   )
 }
-

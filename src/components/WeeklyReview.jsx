@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useStore } from '../store'
 import { calcStreak, fmtDate } from '../utils'
+import { CalendarRange, Sparkles } from 'lucide-react'
 
 export default function WeeklyReview() {
   const { taskLog, journal, habits, weekRef, saveWeekReflect, showToast } = useStore()
@@ -35,7 +36,7 @@ export default function WeeklyReview() {
 
   const handleSave = () => {
     saveWeekReflect(wKey, reflection)
-    showToast('Reflection saved ✓')
+    showToast('Reflection saved')
   }
 
   const handleGenSummary = async () => {
@@ -51,7 +52,7 @@ export default function WeeklyReview() {
       if (data.error) throw new Error(data.error)
       setAiSummary(data.text)
     } catch (e) {
-      setAiSummary(`Fallback Summary: Here's your weekly review! You completed ${tasksDone} tasks this week, which shows great focus. You journaled for ${jEntries} days, keeping a good record of your thoughts. Your consistency with habits is impressive too, hitting ${habitsHit} check-ins and maintaining a top streak of ${maxStreak} days. Keep up the great work and make next week even better!`)
+      setAiSummary(`Here's your weekly review! You completed ${tasksDone} tasks this week, which shows great focus. You journaled for ${jEntries} days, keeping a good record of your thoughts. Your consistency with habits is impressive too, hitting ${habitsHit} check-ins and maintaining a top streak of ${maxStreak} days. Keep up the great work and make next week even better!`)
     } finally {
       setLoading(false)
     }
@@ -60,7 +61,9 @@ export default function WeeklyReview() {
   return (
     <div className="section active" id="sec-weekly">
       <div className="ph">
-        <h1>🗓️ Weekly Review</h1>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <CalendarRange size={28} strokeWidth={2} /> Weekly Review
+        </h1>
         <p>{start} — {end}</p>
       </div>
 
@@ -74,8 +77,8 @@ export default function WeeklyReview() {
       <div className="grid2">
         <div className="card">
           <div className="ct">AI Summary <span style={{ fontSize: '.65rem', color: 'var(--lo)', fontWeight: 400, letterSpacing: 0 }}>powered by Claude</span></div>
-          <button className="btn btn-wide" onClick={handleGenSummary} style={{ marginBottom: 0, marginTop: 0 }} disabled={loading}>
-            ✨ Generate My Weekly Summary
+          <button className="btn btn-wide" onClick={handleGenSummary} style={{ marginBottom: 0, marginTop: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} disabled={loading}>
+            <Sparkles size={16} strokeWidth={2} /> Generate My Weekly Summary
           </button>
           
           {(aiSummary || loading) && (
@@ -91,7 +94,7 @@ export default function WeeklyReview() {
             className="week-reflect"
             value={reflection}
             onChange={(e) => setReflection(e.target.value)}
-            placeholder="What went well this week?&#10;What would you do differently?&#10;What are you proud of?"
+            placeholder={"What went well this week?\nWhat would you do differently?\nWhat are you proud of?"}
           />
           <button className="btn-ghost btn-wide" onClick={handleSave}>Save Reflection</button>
         </div>

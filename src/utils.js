@@ -17,12 +17,12 @@ export const dateKey = (offset = 0) => {
 export const fmtDate = (key) => { const [y, m, d] = key.split('-'); const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return `${months[+m-1]} ${+d}, ${y}`; }
 
 export const ACH = [
-  {id:'first_todo',   icon:'🌱', name:'First Step',      desc:'Complete your first task'},
-  {id:'ten_todos',    icon:'📚', name:'Focused',          desc:'Complete 10 tasks'},
-  {id:'streak3',      icon:'🔥', name:'On Fire',          desc:'3-day habit streak'},
-  {id:'streak7',      icon:'⚡', name:'Momentum',         desc:'7-day habit streak'},
-  {id:'journal5',     icon:'📝', name:'Chronicler',       desc:'Write 5 journal entries'},
-  {id:'allrounder',   icon:'🌟', name:'All-Rounder',      desc:'Use all 4 core sections'},
+  {id:'first_todo',   icon:'◆', name:'First Step',      desc:'Complete your first task'},
+  {id:'ten_todos',    icon:'◈', name:'Focused',          desc:'Complete 10 tasks'},
+  {id:'streak3',      icon:'▲', name:'On Fire',          desc:'3-day habit streak'},
+  {id:'streak7',      icon:'⬡', name:'Momentum',         desc:'7-day habit streak'},
+  {id:'journal5',     icon:'◇', name:'Chronicler',       desc:'Write 5 journal entries'},
+  {id:'allrounder',   icon:'✦', name:'All-Rounder',      desc:'Use all 4 core sections'},
 ];
 
 export function calcStreak(h) {

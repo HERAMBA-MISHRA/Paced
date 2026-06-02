@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { addEvent, getEventsByMonth, deleteEvent, updateEvent } from '../db'
 import { todayKey } from '../utils'
 import { useStore } from '../store'
+import { Trash2, X } from 'lucide-react'
 
 const TYPE_COLORS = {
-  meeting: { bg: 'rgba(56,189,248,0.2)', border: '#38BDF8', icon: '🔵' },
-  personal: { bg: 'rgba(110,231,183,0.2)', border: '#6EE7B7', icon: '🟢' },
-  deadline: { bg: 'rgba(248,113,113,0.2)', border: '#F87171', icon: '🔴' },
-  roadmap: { bg: 'rgba(167,139,250,0.2)', border: '#A78BFA', icon: '🟣' }
+  meeting: { bg: 'rgba(56,189,248,0.2)', border: '#38BDF8' },
+  personal: { bg: 'rgba(110,231,183,0.2)', border: '#6EE7B7' },
+  deadline: { bg: 'rgba(248,113,113,0.2)', border: '#F87171' },
+  roadmap: { bg: 'rgba(167,139,250,0.2)', border: '#A78BFA' }
 }
 
 const parseDateKey = (d) => {
@@ -461,10 +462,10 @@ export default function Calendar() {
               <div>
                 <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '6px', display: 'block' }}>Type</label>
                 <select className="sel" style={{ width: '100%', padding: '12px', fontSize: '0.95rem' }} value={evForm.type} onChange={e=>setEvForm({...evForm, type: e.target.value})}>
-                  <option value="meeting">🔵 Meeting</option>
-                  <option value="personal">🟢 Personal</option>
-                  <option value="deadline">🔴 Deadline</option>
-                  <option value="roadmap">🟣 Roadmap milestone</option>
+                  <option value="meeting">Meeting</option>
+                  <option value="personal">Personal</option>
+                  <option value="deadline">Deadline</option>
+                  <option value="roadmap">Roadmap milestone</option>
                 </select>
               </div>
               
@@ -479,8 +480,8 @@ export default function Calendar() {
               </div>
               
               {evForm.id && (
-                <button className="btn-ghost" style={{ color: 'var(--accent-red, #ef4444)', marginTop: '8px', width: '100%' }} onClick={() => handleDeleteEvent(evForm.id)}>
-                  🗑️ Delete Event
+                <button className="btn-ghost" style={{ color: 'var(--accent-red, #ef4444)', marginTop: '8px', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }} onClick={() => handleDeleteEvent(evForm.id)}>
+                   <Trash2 size={14} strokeWidth={2} /> Delete Event
                 </button>
               )}
             </div>
@@ -495,7 +496,7 @@ export default function Calendar() {
               <h2 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', margin: 0 }}>
                 {new Date(selectedDayKey).toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric' })}
               </h2>
-              <button className="btn-ghost" style={{ padding: '6px 12px' }} onClick={() => setIsDayPanelOpen(false)}>✕</button>
+              <button className="btn-ghost" style={{ padding: '6px 12px' }} onClick={() => setIsDayPanelOpen(false)}><X size={16} strokeWidth={2} /></button>
             </div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -512,14 +513,14 @@ export default function Calendar() {
                   borderLeft: `4px solid ${TYPE_COLORS[e.type]?.border || '#fff'}`,
                   transition: 'transform 0.2s'
                 }}>
-                   <span style={{ fontSize: '1.4rem' }}>{TYPE_COLORS[e.type]?.icon || '🔵'}</span>
+                   <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: TYPE_COLORS[e.type]?.border || '#38BDF8', flexShrink: 0 }}></span>
                    <div style={{ flex: 1 }}>
                      <h4 style={{ margin: '0 0 4px 0', fontSize: '1.05rem', color: 'var(--text-primary)' }}>{e.title}</h4>
                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{e.startTime} - {e.endTime}</span>
                    </div>
                    <button className="btn-ghost" style={{ padding: '8px', color: 'var(--accent-red, #ef4444)' }} onClick={(ev) => { ev.stopPropagation(); handleDeleteEvent(e.id) }}>
-                     🗑️
-                   </button>
+                      <Trash2 size={14} strokeWidth={2} />
+                    </button>
                 </div>
               ))}
             </div>

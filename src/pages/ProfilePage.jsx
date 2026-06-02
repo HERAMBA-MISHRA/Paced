@@ -5,6 +5,7 @@ import { useRef } from 'react'
 import { useStore } from '../store'
 import { hashPin } from '../utils'
 import { exportDataToFile, importDataFromFile } from '../db'
+import { Lock, Unlock } from 'lucide-react'
 
 export default function ProfilePage() {
   const { user } = useUser()
@@ -95,8 +96,8 @@ export default function ProfilePage() {
         
         {!pinMode && (
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.9rem', color: 'var(--text)' }}>
-              {journalPin ? '🔒 PIN Lock is Active' : '🔓 Journal is Unlocked'}
+            <span style={{ fontSize: '0.9rem', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {journalPin ? <><Lock size={16} strokeWidth={2} /> PIN Lock is Active</> : <><Unlock size={16} strokeWidth={2} /> Journal is Unlocked</>}
             </span>
             <button className="btn-ghost" onClick={() => setPinMode(journalPin ? 'remove' : 'set')} style={{ padding: '6px 12px', fontSize: '0.8rem', margin: 0 }}>
               {journalPin ? 'Remove PIN' : 'Set PIN'}

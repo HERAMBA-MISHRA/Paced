@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../store'
 import { calcStreak } from '../utils'
+import { Repeat, Flame, X } from 'lucide-react'
 
 export default function Habits() {
   const { habits, addHabit, toggleHabitDate, deleteHabit, showToast } = useStore()
@@ -15,7 +16,7 @@ export default function Habits() {
       dates: []
     })
     setHabitIn('')
-    showToast('Habit added ✓')
+    showToast('Habit added')
   }
 
   const days = []
@@ -33,7 +34,9 @@ export default function Habits() {
   return (
     <div className="section active" id="sec-habits">
       <div className="ph">
-        <h1>🔁 Habit Tracker</h1>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Repeat size={28} strokeWidth={2} /> Habit Tracker
+        </h1>
         <p>Build consistency — one day at a time</p>
       </div>
 
@@ -59,10 +62,10 @@ export default function Habits() {
               <div className="habit-top">
                 <div>
                   <div className="habit-name">{h.name}</div>
-                  <div className="habit-streak">🔥 {calcStreak(h)} day streak</div>
+                  <div className="habit-streak"><Flame size={14} strokeWidth={2} /> {calcStreak(h)} day streak</div>
                 </div>
                 <div className="habit-actions">
-                  <button className="del" onClick={() => deleteHabit(i)}>✕</button>
+                  <button className="del" onClick={() => deleteHabit(i)}><X size={14} /></button>
                 </div>
               </div>
               <div className="habit-week">

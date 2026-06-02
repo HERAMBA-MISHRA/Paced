@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../store'
 import { todayKey } from '../utils'
+import { CheckSquare, X } from 'lucide-react'
 
 export default function Todos() {
   const { todos, addTodo, toggleTodo, deleteTodo, showToast } = useStore()
@@ -20,7 +21,7 @@ export default function Todos() {
       createdAt: todayKey()
     })
     setTodoIn('')
-    showToast('Task added ✓')
+    showToast('Task added')
   }
 
   let list = todos
@@ -32,7 +33,9 @@ export default function Todos() {
   return (
     <div className="section active" id="sec-todos">
       <div className="ph">
-        <h1>✅ To-Do List</h1>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <CheckSquare size={28} strokeWidth={2} /> To-Do List
+        </h1>
         <p>Capture, prioritise, and crush your tasks</p>
       </div>
 
@@ -47,9 +50,9 @@ export default function Todos() {
             style={{ minWidth: '220px' }}
           />
           <select className="sel" value={todoPri} onChange={(e) => setTodoPri(e.target.value)}>
-            <option value="low">🟢 Low</option>
-            <option value="med">🟡 Medium</option>
-            <option value="high">🔴 High</option>
+            <option value="low">Low</option>
+            <option value="med">Medium</option>
+            <option value="high">High</option>
           </select>
           <button className="btn" onClick={handleAdd}>Add Task</button>
         </div>
@@ -66,7 +69,7 @@ export default function Todos() {
               <div className={`chk ${t.done ? 'done' : ''}`} onClick={() => toggleTodo(t.id, todayKey())}></div>
               <span className={`todo-txt ${t.done ? 'done' : ''}`}>{t.text}</span>
               <span className={`priority-badge p-${t.priority}`}>{t.priority}</span>
-              <button className="del" onClick={() => deleteTodo(t.id)}>✕</button>
+              <button className="del" onClick={() => deleteTodo(t.id)}><X size={14} /></button>
             </li>
           )) : (
             <li className="empty">Nothing here yet</li>

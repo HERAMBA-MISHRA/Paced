@@ -1,4 +1,5 @@
 import { useStore } from '../store'
+import { BarChart3 } from 'lucide-react'
 
 export default function Analytics() {
   const { taskLog, journal, habits } = useStore()
@@ -18,7 +19,9 @@ export default function Analytics() {
   return (
     <div className="section active" id="sec-analytics">
       <div className="ph">
-        <h1>📊 Analytics</h1>
+        <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <BarChart3 size={28} strokeWidth={2} /> Analytics
+        </h1>
         <p>Your progress at a glance</p>
       </div>
 
